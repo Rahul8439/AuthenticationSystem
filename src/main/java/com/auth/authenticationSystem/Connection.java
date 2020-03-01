@@ -24,7 +24,15 @@ public class Connection {
 		session.save(student);
 		session.getTransaction().commit();
 	}
-
+  
+	public static List<Student> checkUserExistInDB(String name) {
+		session=HibernateSession.gethibernateSession();
+		String queryString="from Student where name= ?";
+		Query queryObject=session.createQuery(queryString);
+		queryObject.setParameter(0, name);
+		List Studentlist = queryObject.list();
+		return Studentlist;
+	}
 	void updateRecord() {
 
 	}
@@ -43,11 +51,7 @@ public class Connection {
 	
 	public static int verifyData(Student student) {
 		String  verifyName = student.getName();
-		String queryString = "from Student where name= ?";
-		session = HibernateSession.gethibernateSession();
-		Query queryObject = session.createQuery(queryString);
-		queryObject.setParameter(0, verifyName);
-		List Studentlist = queryObject.list();
+		List Studentlist = checkUserExistInDB(verifyName);
 		if(Studentlist.isEmpty())
 			return 0;
 		else
